@@ -1,6 +1,6 @@
-const fs = require('fs');
+import fs from 'fs';
 
-class ProductManager {
+  class ProductManager {
   constructor(filePath) {
     this.path = filePath;
     this.products = this.loadProducts();
@@ -37,8 +37,12 @@ class ProductManager {
     return maxId + 1;
   }
 
-  getProducts() {
-    return this.products;
+  getProducts(limit) {
+    if(!limit){
+    return this.products;}
+    else{
+      return this.products.slice(0,limit)
+    }
   }
 
   getProductById(productId) {
@@ -63,37 +67,39 @@ class ProductManager {
   }
 }
 
-// Ejemplo de uso:
-const productManager = new ProductManager('products.json');
+ //Ejemplo de uso:
+ const productManager = new ProductManager('products.json');
 
-// Agregar un producto
-const newProduct = productManager.addProduct({
-  title: 'Producto A',
-  description: 'Descripción del Producto A',
-  price: 10.99,
-  thumbnail: 'ruta/imagen/a.jpg',
-  code: 'ABC123',
-  stock: 50,
-});
-console.log('Producto agregado:', newProduct);
+// // Agregar un producto
+// const newProduct = productManager.addProduct({
+//   title: 'Producto A',
+//   description: 'Descripción del Producto A',
+//   price: 10.99,
+//   thumbnail: 'ruta/imagen/a.jpg',
+//   code: 'ABC123',
+//   stock: 50,
+// });
+// console.log('Producto agregado:', newProduct);
 
-// Consultar todos los productos
-const allProducts = productManager.getProducts();
-console.log('Todos los productos:', allProducts);
+// // Consultar todos los productos
+// const allProducts = productManager.getProducts();
+// console.log('Todos los productos:', allProducts);
 
-// Consultar un producto por ID
-const foundProduct = productManager.getProductById(newProduct.id);
-console.log('Producto encontrado:', foundProduct);
+// // Consultar un producto por ID
+// const foundProduct = productManager.getProductById(newProduct.id);
+// console.log('Producto encontrado:', foundProduct);
 
-// Actualizar un producto por ID
-const updatedProduct = productManager.updateProduct(newProduct.id, { price: 15.99 });
-console.log('Producto actualizado:', updatedProduct);
+// // Actualizar un producto por ID
+// const updatedProduct = productManager.updateProduct(newProduct.id, { price: 15.99 });
+// console.log('Producto actualizado:', updatedProduct);
 
-// Consultar todos los productos después de la actualización
-console.log('Todos los productos después de la actualización:', productManager.getProducts());
+// // Consultar todos los productos después de la actualización
+// console.log('Todos los productos después de la actualización:', productManager.getProducts());
 
-// Eliminar un producto por ID
-productManager.deleteProduct(newProduct.id);
+// // Eliminar un producto por ID
+// productManager.deleteProduct(newProduct.id);
 
-// Consultar todos los productos después de la eliminación
-console.log('Todos los productos después de la eliminación:', productManager.getProducts());
+// // Consultar todos los productos después de la eliminación
+// console.log('Todos los productos después de la eliminación:', productManager.getProducts());
+
+export default ProductManager;
