@@ -5,6 +5,8 @@ const userRouter = require('./routes/apis/users.router.js')
 const productsRouter = require('./routes/apis/products.router.js')
 const viewsRouter = require('./routes/views.router.js')
 const { uploader } = require('./helpers/uploader.js')
+const cartsRouter = require('./routes/apis/carts.router.js');
+
 // importando socket .io
 const { Server } = require('socket.io')
 
@@ -25,6 +27,7 @@ app.set('views', __dirname + '/views')
 app.use('/', viewsRouter)
 app.use('/api/users', userRouter)
 app.use('/api/products', productsRouter)
+app.use('/api/carts', cartsRouter);
 app.use(( err, req, res, next)=>{
     console.error(err.stack)
     res.status(500).send('error de server')

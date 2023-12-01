@@ -32,7 +32,7 @@ router.get('/:id?', async (req, res) => {
     }
 });
 
-// Otras rutas para diferentes operaciones
+//RUTA PARA POST
 router.post('/', async (req, res) => {
     try {
         const {
@@ -76,12 +76,47 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/', (req, res) => {
-    res.send('put productos');
+// Ruta para actualizar un producto por ID
+router.put('/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const updatedProductData = req.body;
+
+        const existingProduct = await productManager.getProductById(productId);
+        if (!existingProduct) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        // Actualizar los campos del producto
+        const updatedProduct = { ...existingProduct, ...updatedProductData };
+
+        // Guardar el producto actualizado
+        await productManager.updateProduct(productId, updatedProduct);
+
+        res.json({ message: 'Producto actualizado correctamente', product: updatedProduct });
+    } catch (error) {
+        console.error(`Error al actualizar el producto: ${error.message}`);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
 });
 
-router.delete('/', (req, res) => {
-    res.send('delete productos');
+router.delete('/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+
+        const existingProduct = await productManager.getProductById(productId);
+        if (!existingProduct) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        // Eliminar el producto
+        await productManager.deleteProduct(productId);
+
+        res.json({ message: 'Producto eliminado correctamente' });
+    } catch (error) {
+        console.error(`Error al eliminar el producto: ${error.message}`);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
 });
 
 module.exports = router;

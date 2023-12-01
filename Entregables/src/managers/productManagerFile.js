@@ -17,6 +17,15 @@ class ProductManagerFile {
         }
     }
 
+    writeFile = async (data) => {
+        try {
+            await fs.promises.writeFile(this.path, JSON.stringify(data, null, 2), 'utf-8');
+        } catch (error) {
+            console.error(`Error al escribir en el archivo: ${error.message}`);
+            throw error;
+        }
+    }
+
     generateUniqueId = (products) => {
         // Verificar si 'products' es undefined o nulo
         if (!products || products.length === 0) {
@@ -66,10 +75,29 @@ class ProductManagerFile {
                 products = [...products, newItem];
             }
 
-            await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2), 'utf-8');
+            await this.writeFile(products);
             return 'Producto agregado';
         } catch (error) {
             return new Error(error);
+        }
+    }
+
+    updateProduct = async (productId, updatedData) => {
+        try {
+            let products = await this.readFile();
+            const index = products.findIndex(product => product.id == productId);
+
+            if (index === -1) {
+                throw new Error('Producto no encontrado');
+            }
+
+            // Actualizar el producto
+            products[index] = { ...products[index], ...updatedData };
+
+            await this.writeFile(products);
+        } catch (error) {
+            console.error(`Error al actualizar el producto: ${error.message}`);
+            throw error;
         }
     }
 }

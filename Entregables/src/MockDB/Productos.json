@@ -1,16 +1,16 @@
 [
   {
     "id": 1,
-    "title": "Producto de ejemplo  1",
+    "title": "Nuevo título",
     "description": "Descripción del producto1 ",
     "code": "P001",
-    "price": 19.99,
+    "price": 29.99,
     "category": "Electrónicos",
     "thumbnails": [
       "ruta/imagen1.jpg",
       "ruta/imagen2.jpg"
     ],
-    "stock": 50,
+    "stock": 100,
     "status": true
   },
   {
