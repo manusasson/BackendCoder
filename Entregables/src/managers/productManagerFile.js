@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const path = './src/mockDB/Productos.json'
+const path = '../src/MockDB/Productos.json'
 
 class ProductManagerFile{
     constructor(){
@@ -13,6 +13,7 @@ class ProductManagerFile{
             console.log(data)
             return JSON.parse(data)            
         } catch (error) {
+            console.error(`Error al leer el archivo: ${error.message}`);
             return []
         }        
     }
@@ -28,9 +29,11 @@ class ProductManagerFile{
     
     getProductById = async (id) => {
         try {
+            console.log("llgando")
             const products = await this.readFile()
-            return products.find(product => product.id === id)                     
+            return products.find(product => product.id == id)                     
         } catch (error) {
+           
             return  new Error(error)
         }
     }
