@@ -1,68 +1,99 @@
 const { Router } = require('express');
 const router = Router();
-const CartManager = require('../../managers/cartManagerFile');
-const ProductManager = require('../../managers/productManagerFile');
+const CartManagerFile = require('../../managers/cartManagerFile');
 
-const cartManager = new CartManager();
-const productManager = new ProductManager();
+const cartManager = new CartManagerFile();
 
-// Ruta para listar los productos de un carrito por ID
-router.get('/:id', async (req, res) => {
+// Obtener productos de un carrito por ID
+router.get('/:cid', async (req, res) => {
     try {
-        const cartId = req.params.id;
-
+        const cartId = req.params.cid;
         const cart = await cartManager.getCartById(cartId);
+
         if (!cart) {
             return res.status(404).json({ error: 'Carrito no encontrado' });
         }
 
-        // Obtener los productos del carrito
-        const products = await productManager.getProducts();
-        const cartProducts = cart.products.map(cartProduct => {
-            const product = products.find(product => product.id == cartProduct.id);
-            return { ...cartProduct, product };
-        });
-
-        res.json({ cartId, products: cartProducts });
+        res.json(cart.products);
     } catch (error) {
         console.error(`Error al obtener los productos del carrito: ${error.message}`);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
-// Ruta para agregar un producto al carrito por ID de carrito y ID de producto
+// Agregar un producto al carrito
 router.post('/:cid/product/:pid', async (req, res) => {
     try {
         const cartId = req.params.cid;
         const productId = req.params.pid;
 
+        // Obtener el carrito
         const cart = await cartManager.getCartById(cartId);
+
         if (!cart) {
             return res.status(404).json({ error: 'Carrito no encontrado' });
         }
 
-        const product = await productManager.getProductById(productId);
-        if (!product) {
-            return res.status(404).json({ error: 'Producto no encontrado' });
-        }
+        // Verificar si el producto ya está en el carrito
+        const existingProduct = cart.products.find(product => product.id == productId);
 
-        const existingCartItem = cart.products.find(cartProduct => cartProduct.id == productId);
-        if (existingCartItem) {
-            // Si el producto ya existe en el carrito, incrementar la cantidad
-            existingCartItem.quantity += 1;
+        if (existingProduct) {
+            // Si el producto ya existe, incrementar la cantidad
+            existingProduct.quantity += 1;
         } else {
-            // Si el producto no existe, agregarlo al carrito
+            // Si el producto no existe, agregarlo al carrito con cantidad 1
             cart.products.push({ id: productId, quantity: 1 });
         }
 
-        // Guardar el carrito actualizado
+        // Actualizar el carrito
         await cartManager.updateCart(cartId, cart);
 
-        res.json({ message: 'Producto agregado al carrito correctamente', cart });
+        res.json({ message: 'Producto agregado al carrito' });
     } catch (error) {
         console.error(`Error al agregar el producto al carrito: ${error.message}`);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
+// Crear un nuevo carrito
+router.post('/', async (req, res) => {
+    try {
+       
+        const newCart = {
+            id: null, // Deja que el sistema genere un ID único
+            products: [],
+        };
+
+        // Guardar el nuevo carrito
+        const cartId = await cartManager.addCart(newCart);
+
+        res.json({ cartId });
+    } catch (error) {
+        console.error(`Error al crear un nuevo carrito: ${error.message}`);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Agregar producto al carrito
+router.post('/:cid/product/:pid', async (req, res) => {
+    try {
+        const cartId = req.params.cid;
+        const productId = req.params.pid;
+
+        // obtener más detalles del producto desde el cuerpo de la solicitud si es necesario
+        // const productDetails = req.body;
+
+        
+        const result = await cartManager.addProductToCart(cartId, productId);
+
+        if (result.success) {
+            res.json({ message: 'Producto agregado al carrito con éxito', cart: result.cart });
+        } else {
+            res.status(404).json({ error: 'No se pudo agregar el producto al carrito' });
+        }
+    } catch (error) {
+        console.error(`Error al agregar producto al carrito: ${error.message}`);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
 module.exports = router;

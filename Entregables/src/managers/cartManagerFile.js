@@ -15,6 +15,61 @@ class CartManagerFile {
         }
     }
 
+    addCart = async (newCart) => {
+        try {
+            let carts = await this.readFile();
+            const newId = this.generateUniqueId(carts);
+            newCart.id = newId;
+
+            carts.push(newCart);
+            await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2), 'utf-8');
+
+            return newId;
+        } catch (error) {
+            console.error(`Error al agregar un nuevo carrito: ${error.message}`);
+            throw error;
+        }
+    }
+    generateUniqueId = (carts) => {
+        // Verificar si 'carts' es undefined o nulo
+        if (!carts || carts.length === 0) {
+            return 1; // Si no hay carritos, comenzar desde 1
+        }
+
+        // Obtener el último ID existente
+        const lastId = carts[carts.length - 1].id;
+        // Generar un nuevo ID único (puedes ajustar la lógica según tus necesidades)
+        const newId = lastId + 1;
+        return newId;
+    }
+
+    addProductToCart = async (cartId, productId) => {
+        try {
+            let carts = await this.readFile();
+            const cartIndex = carts.findIndex(cart => cart.id == cartId);
+
+            if (cartIndex !== -1) {
+                // Puedes realizar más validaciones o lógica según tus necesidades
+                const productToAdd = {
+                    id: productId,
+                    quantity: 1, // Puedes ajustar esto según tus necesidades
+                };
+
+                carts[cartIndex].products.push(productToAdd);
+
+                await fs.promises.writeFile(this.path, JSON.stringify(carts, null, 2), 'utf-8');
+
+                return { success: true, cart: carts[cartIndex] };
+            } else {
+                return { success: false };
+            }
+        } catch (error) {
+            console.error(`Error al agregar producto al carrito: ${error.message}`);
+            throw error;
+        }
+    }
+
+
     getCartById = async (cartId) => {
         try {
             const carts = await this.readFile();
@@ -43,7 +98,7 @@ class CartManagerFile {
         }
     }
 
-    // Otras funciones según sea necesario
+
 }
 
 module.exports = CartManagerFile;
