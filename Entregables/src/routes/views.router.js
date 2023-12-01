@@ -10,8 +10,8 @@ const productMock = [
 
 router.get('/', (req,res)=> {
     res.render('index', {
-        title: 'Mercadito Fede', 
-        name: 'Fede el mejor',
+        title: 'E-Commerce Manu', 
+        name: 'E-Commerce Manu',
         style: 'index.css'
     })
 })
@@ -19,8 +19,8 @@ router.get('/', (req,res)=> {
 router.get('/prod', (req, res) => {
     
     const userMock = {
-        title: 'Mercadito Fede', 
-        name: 'Fede el mejor',
+        title: 'E-Commerce Manu', 
+        name: 'E-Commerce Manu',
         role:  'admin'
     }
 
