@@ -1,23 +1,30 @@
 [
   {
     "id": 1,
-    "nombre": "Producto 1",
-    "precio": 19.99,
-    "descripcion": "Este es el producto 1",
-    "stock": 50
+    "title": "Producto de ejemplo  1",
+    "description": "Descripción del producto1 ",
+    "code": "P001",
+    "price": 19.99,
+    "category": "Electrónicos",
+    "thumbnails": [
+      "ruta/imagen1.jpg",
+      "ruta/imagen2.jpg"
+    ],
+    "stock": 50,
+    "status": true
   },
   {
     "id": 2,
-    "nombre": "Producto 2",
-    "precio": 29.99,
-    "descripcion": "Este es el producto 2",
-    "stock": 30
-  },
-  {
-    "id": 3,
-    "nombre": "Producto 3",
-    "precio": 39.99,
-    "descripcion": "Este es el producto 3",
-    "stock": 20
+    "title": "Producto de ejemplo  2",
+    "description": "Descripción del producto2 ",
+    "code": "P002",
+    "price": 89.99,
+    "category": "Bazar",
+    "thumbnails": [
+      "ruta/imagen3.jpg",
+      "ruta/imagen4.jpg"
+    ],
+    "stock": 50,
+    "status": true
   }
 ]

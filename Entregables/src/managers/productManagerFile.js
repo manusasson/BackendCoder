@@ -1,73 +1,77 @@
-const fs = require('fs')
+const fs = require('fs');
 
-const path = '../src/MockDB/Productos.json'
+const path = '../src/MockDB/Productos.json';
 
-class ProductManagerFile{
-    constructor(){
-        this.path = path
+class ProductManagerFile {
+    constructor() {
+        this.path = path;
     }
 
     readFile = async () => {
         try {
-            const data = await fs.promises.readFile(this.path, 'utf-8')
-            console.log(data)
-            return JSON.parse(data)            
+            const data = await fs.promises.readFile(this.path, 'utf-8');
+            return JSON.parse(data);
         } catch (error) {
             console.error(`Error al leer el archivo: ${error.message}`);
-            return []
-        }        
+            return [];
+        }
+    }
+
+    generateUniqueId = (products) => {
+        // Verificar si 'products' es undefined o nulo
+        if (!products || products.length === 0) {
+            return 1; // Si no hay productos, comenzar desde 1
+        }
+
+        // Obtener el último ID existente
+        const lastId = products[products.length - 1].id;
+        // Generar un nuevo ID único (puedes ajustar la lógica según tus necesidades)
+        const newId = lastId + 1;
+        return newId;
     }
 
     getProducts = async () => {
         try {
-            return await this.readFile()
+            return await this.readFile();
         } catch (error) {
-            return 'No se hay productos'
+            return 'No se hay productos';
         }
     }
 
-    
     getProductById = async (id) => {
         try {
-            console.log("llgando")
-            const products = await this.readFile()
-            return products.find(product => product.id == id)                     
+            const products = await this.readFile();
+            const product = products.find(product => product.id == id);
+            return product;
         } catch (error) {
-           
-            return  new Error(error)
+            console.error(`Error al obtener el producto por ID: ${error.message}`);
+            throw error;
         }
     }
-    
-    
+
     addProduct = async (newItem) => {
-        try {   
-            
-            let products = await this.readFile()
-            // si esta no lo voy a crear 
-            const productDb = products.find(product => product.code === newItem.code)
-            console.log(productDb)
+        try {
+            let products = await this.readFile();
+            const productDb = products.find(product => product.code === newItem.code);
             if (productDb) {
-                return `Se encuenta el producto`
+                return 'Se encuentra el producto';
             }
 
-    
-            // console.log(products.length)
-            if (products.length === 0 ) {
-                newItem.id = 1
-                products.push(newItem) 
+            const newId = this.generateUniqueId(products);
+            newItem.id = newId;
+
+            if (products.length === 0) {
+                products.push(newItem);
             } else {
-                products =  [...products, {...newItem, id: products[products.length - 1].id + 1 } ]
+                products = [...products, newItem];
             }
 
-            await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2), 'utf-8')
-
-            return 'Producto agregado'
+            await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2), 'utf-8');
+            return 'Producto agregado';
         } catch (error) {
-            return new Error(error)
+            return new Error(error);
         }
     }
-    
 }
 
-
-module.exports = ProductManagerFile
+module.exports = ProductManagerFile;
