@@ -24,7 +24,7 @@
             
             updatedProducts.forEach(product => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `${product.name} - Precio: ${product.price}`;
+                listItem.textContent = `${product.title} - Precio: ${product.price}`;
                 realTimeList.appendChild(listItem);
             });
         });
