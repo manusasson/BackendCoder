@@ -1,12 +1,15 @@
 // const express = require('express')
-const express = require('express')
-const handlebars = require('express-handlebars')
-const userRouter = require('./routes/apis/users.router.js')
-const productsRouter = require('./routes/apis/products.router.js')
-const viewsRouter = require('./routes/views.router.js')
-const { uploader } = require('./helpers/uploader.js')
+const express = require('express');
+const handlebars = require('express-handlebars');
+const userRouter = require('./routes/apis/users.router.js');
+const productsRouter = require('./routes/apis/products.router.js');
+const viewsRouter = require('./routes/views.router.js');
+const { uploader } = require('./helpers/uploader.js');
 const cartsRouter = require('./routes/apis/carts.router.js');
 const http = require('http');
+
+
+
 
 // importando socket .io
 const { Server } = require('socket.io')

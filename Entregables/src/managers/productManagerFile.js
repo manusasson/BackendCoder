@@ -27,16 +27,11 @@ class ProductManagerFile {
     }
 
     generateUniqueId = (products) => {
-        // Verificar si 'products' es undefined o nulo
-        if (!products || products.length === 0) {
-            return 1; // Si no hay productos, comenzar desde 1
-        }
-
-        // Obtener el último ID existente
-        const lastId = products[products.length - 1].id;
-        // Generar un nuevo ID único (puedes ajustar la lógica según tus necesidades)
-        const newId = lastId + 1;
-        return newId;
+         // Utilizando el operador ternario para verificar si 'products' es undefined o nulo
+         const lastId = products && products.length ? products[products.length - 1].id : 0;
+         // Generar un nuevo ID único
+         const newId = lastId + 1;
+         return newId;
     }
 
     getProducts = async () => {

@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const router = Router();
 const ProductManager = require('../../managers/productManagerFile');
-const  {io}  = require('../../server');
+
+
 
 
 // Obtener un producto por su ID
@@ -55,6 +56,7 @@ router.post('/', async (req, res) => {
 
         // Autogenerar ID (puedes implementar tu lógica aquí)
         const newProductId = productManager.generateUniqueId();
+        
 
         const newProduct = {
             id: newProductId,
@@ -69,10 +71,12 @@ router.post('/', async (req, res) => {
         };
 
         // Agregar el nuevo producto
+        console.log(newProduct)
         await productManager.addProduct(newProduct);
         const updatedProducts = await productManager.getProducts();
 
     //Emitir un mensaje de que se agrego un producto en socket
+       const io = require('../../server').io;
        io.emit('updateRealTimeList', updatedProducts);
     ///Emitir un mensaje de que se agrego un producto en sockets
 
