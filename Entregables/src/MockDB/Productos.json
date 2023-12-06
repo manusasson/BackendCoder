@@ -12,5 +12,61 @@
     ],
     "stock": 50,
     "status": true
+  },
+  {
+    "id": 2,
+    "title": "Producto de ejemplo  3",
+    "description": "Descripción del producto 3 ",
+    "code": "P003",
+    "price": 189.99,
+    "category": "Bazar",
+    "thumbnails": [
+      "ruta/imagen3.jpg",
+      "ruta/imagen4.jpg"
+    ],
+    "stock": 50,
+    "status": true
+  },
+  {
+    "id": 3,
+    "title": "Producto de ejemplo  4",
+    "description": "Descripción del producto 4 ",
+    "code": "P004",
+    "price": 500.99,
+    "category": "Bazar",
+    "thumbnails": [
+      "ruta/imagen3.jpg",
+      "ruta/imagen4.jpg"
+    ],
+    "stock": 1,
+    "status": true
+  },
+  {
+    "id": 4,
+    "title": "Producto de ejemplo  5",
+    "description": "Descripción del producto 5 ",
+    "code": "P005",
+    "price": 30.99,
+    "category": "Bazar",
+    "thumbnails": [
+      "ruta/imagen3.jpg",
+      "ruta/imagen4.jpg"
+    ],
+    "stock": 1,
+    "status": true
+  },
+  {
+    "id": 5,
+    "title": "Producto de ejemplo  6",
+    "description": "Descripción del producto 6 ",
+    "code": "P006",
+    "price": 320.99,
+    "category": "Bazar",
+    "thumbnails": [
+      "ruta/imagen3.jpg",
+      "ruta/imagen4.jpg"
+    ],
+    "stock": 1,
+    "status": true
   }
 ]
