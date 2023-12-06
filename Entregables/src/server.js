@@ -6,9 +6,11 @@ const productsRouter = require('./routes/apis/products.router.js')
 const viewsRouter = require('./routes/views.router.js')
 const { uploader } = require('./helpers/uploader.js')
 const cartsRouter = require('./routes/apis/carts.router.js');
+const http = require('http');
 
 // importando socket .io
 const { Server } = require('socket.io')
+// importando socket .io
 
 const app = express()
 const PORT = 8080 || process.env.PORT
@@ -40,20 +42,18 @@ const httpServer = app.listen(PORT, err =>{
 // insatanciando un server io
 const io = new Server(httpServer)
 
-let messagesArray = []
 
-io.on('connection', socket => {
-    console.log('Nuevo cliente conectado')
+io.on('connection', (socket) => {
+    console.log('Nuevo cliente conectado');
 
-    socket.on('message', data => {
-        messagesArray.push(data)
-        io.emit('messageLogs', messagesArray)
-    })
+    socket.on('message', (data) => {
+        // Lógica para manejar los mensajes del cliente
+        console.log('Mensaje recibido:', data);
+        // Puedes emitir mensajes a otros clientes o realizar otras acciones
+        io.emit('messageLogs', data);
+    });
 })
-
-
-
-
+module.exports = { io, httpServer };
 
 
 

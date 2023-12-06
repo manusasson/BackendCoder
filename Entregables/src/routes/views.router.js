@@ -9,7 +9,7 @@ const productMock = [
 ]
 
 router.get('/', (req,res)=> {
-    res.render('index', {
+    res.render('index.hbs', {
         title: 'E-Commerce Manu', 
         name: 'E-Commerce Manu',
         style: 'index.css'
@@ -32,6 +32,10 @@ router.get('/prod', (req, res) => {
         style: 'products.css'
     })
 })
+router.get('/realtimeproducts', async (req, res) => {
+    const products = await productManager.getProducts();
+    res.render('realTimeProducts', { products });
+});
 
 module.exports = router
 

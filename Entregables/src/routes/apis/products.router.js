@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const router = Router();
 const ProductManager = require('../../managers/productManagerFile');
+const  {io}  = require('../../server');
+
 
 // Obtener un producto por su ID
 
@@ -68,6 +70,12 @@ router.post('/', async (req, res) => {
 
         // Agregar el nuevo producto
         await productManager.addProduct(newProduct);
+        const updatedProducts = await productManager.getProducts();
+
+    //Emitir un mensaje de que se agrego un producto en socket
+       io.emit('updateRealTimeList', updatedProducts);
+    ///Emitir un mensaje de que se agrego un producto en sockets
+
 
         res.json({ message: 'Producto agregado correctamente', product: newProduct });
     } catch (error) {
