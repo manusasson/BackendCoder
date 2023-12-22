@@ -1,73 +1,65 @@
 const { Router } = require('express')
-const { userModel } = require('../../models/users.models')
+const { usersModel } = require('../../models/users.models')
 
 const router = Router()
+//
 
-
-// configuración 
-// GET localhost:8080 /api/users /
-router.get('/', async(req, res) =>{
-   const users =  await userModel.find()
-   res.send('get users')
+// const userManager = new UserManagerMongo().
+router.get('/', async (req, res) =>{
+    // sinc o async ?
+    try {
+        const users = await usersModel.find({first_name: 'Celia'}).explain('executionStats') // no tengo conección
+        console.log(users)
+        res.send(users)
+        
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 
-
-
-
 // POST localhost:8080  /api/users /
-router.post('/', (req, response) =>{
-    const body = req.body
-    console.log(body)
-
-    })
-
-
-
-
-
-
+router.post('/', async (req, res) =>{
+    try {
+        const {first_name, last_name, email} = req.body
+        // validación
+        const result = await usersModel.create({
+            first_name,
+            last_name,
+            email
+        })
+        console.log(first_name, last_name, email)
+        res.status(201).send({ 
+            status: 'success',
+            payload: result        
+        })
+    } catch (error) {
+        console.log(error)
+    }
+    
+})
 // PUT localhost:8080  /api/users /:uid
-router.put('/:uid',  (request, response) =>{
+router.put('/:uid',  async (req, res) =>{
 
-    const { userId } = request.params
+    const { uid } = req.params
+    const userToReplace = req.body
     // venga el id
-    const index = arrayUsuarios.findIndex(user => user.id === userId)
-    // exista el usuario 
-    if (index === -1) {
-        return response.status(400).send({ message: 'No se encuentra el usuario'})
-    }
-
-    //mada el  cliente request 
-    let user = request.body
-    if (!user.nombre || !user.apellido) {
-        return response.status(400).send({ message: 'Che pasar todos los datos'})
-    }
-
-    // console.log('user post',user)
-    arrayUsuarios[index] = user
-    console.log(arrayUsuarios)
-
-    response.status(201).send({ 
-        users: arrayUsuarios,
-        message: 'usuario Modificado' 
+    const result = await usersModel.updateOne({_id: uid}, userToReplace)
+    res.status(201).send({ 
+        status: 'success',
+        payload: result 
     })
 })
 
 // DELETE localhost:8080  /api/users /:uid
-router.delete('/:uid', (req, res)=> {
-    const { userId } = req.params
+router.delete('/:uid', async  (req, res)=> {
+    const { uid } = req.params
 
-    let arrayTamanno = arrayUsuarios.length
-    console.log(arrayTamanno)
-    let users = arrayUsuarios.filter(user => user.id !== userId )
-    console.log(users.length)
-    if (users.length === arrayTamanno) {
-        res.status(404).send({ message:"Usuario no encontrado" })
-    }
-    res.status(200).send({ message:"Usuario borrado", users })
+    const result = await usersModel.deleteOne({_id: uid})
+    res.status(200).send({ 
+        status: "success", 
+        payload: result 
+    })
 })
 
 module.exports = router
-
-
