@@ -7,7 +7,7 @@ const viewsRouter = require('./routes/views.router.js');
 const { uploader } = require('./helpers/uploader.js');
 const cartsRouter = require('./routes/apis/carts.router.js');
 const http = require('http');
-
+const mongoose = require('mongoose')
 
 
 
@@ -17,6 +17,13 @@ const { Server } = require('socket.io')
 
 const app = express()
 const PORT = 8080 || process.env.PORT
+
+const connectDb =  async ()  => {
+    await mongoose.connect('mongodb+srv://manusasson:25081991@cluster0.b1fovzj.mongodb.net/BasePruebaretryWrites=true&w=majority')
+    console.log("conectado")
+}
+connectDb()
+
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
