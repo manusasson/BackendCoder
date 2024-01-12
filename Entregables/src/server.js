@@ -1,29 +1,18 @@
-// const express = require('express')
-const express = require('express');
-const handlebars = require('express-handlebars');
-const userRouter = require('./routes/apis/users.router.js');
-const productsRouter = require('./routes/apis/products.router.js');
-const viewsRouter = require('./routes/views.router.js');
-const { uploader } = require('./helpers/uploader.js');
-const cartsRouter = require('./routes/apis/carts.router.js');
-const http = require('http');
-const mongoose = require('mongoose')
-
-
-
-// importando socket .io
+const express = require('express')
+const handlebars = require('express-handlebars')
+const userRouter = require('./routes/apis/users.router.js')
+const productsRouter = require('./routes/apis/products.router.js')
+const viewsRouter = require('./routes/views.router.js')
+const cartsRouter = require('./routes/apis/carts.router.js')
+const ordersRouter = require('./routes/apis/orders.router.js')
+const sessionsRouter = require('./routes/apis/sessions.router.js')
 const { Server } = require('socket.io')
-// importando socket .io
+const { connectDB } = require('./config/index.js')
+
+
 
 const app = express()
-const PORT = 8080 || process.env.PORT
-
-const connectDb =  async ()  => {
-    await mongoose.connect('mongodb+srv://manusasson:25081991@cluster0.b1fovzj.mongodb.net/BasePruebaretryWrites=true&w=majority')
-    console.log("conectado")
-}
-connectDb()
-
+const PORT = 8080
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -34,36 +23,30 @@ app.engine('hbs', handlebars.engine({
 }))
 app.set('view engine', 'hbs')
 app.set('views', __dirname + '/views')
-
+connectDB()
 
 app.use('/', viewsRouter)
-app.use('/api/users', userRouter)
+app.use('/api/users', userRouter)// crud de user (userManager uso completo)
 app.use('/api/products', productsRouter)
-app.use('/api/carts', cartsRouter);
+app.use('/api/carts', cartsRouter)
+app.use('/api/orders', ordersRouter)
+app.use('/api/sessions', sessionsRouter)// login - register - logout (userMAnager)
+ 
 app.use(( err, req, res, next)=>{
-    console.error(err.stack)
-    res.status(500).send('error de server')
+    console.error(err)
+    res.status(500).send(`Error Server`)
 })
 
 const httpServer = app.listen(PORT, err =>{
     if (err)  console.log(err)
     console.log(`Escuchando en el puerto ${PORT}`)
 })
-// insatanciando un server io
-const io = new Server(httpServer)
 
 
-io.on('connection', (socket) => {
-    console.log('Nuevo cliente conectado');
 
-    socket.on('message', (data) => {
-        // Lógica para manejar los mensajes del cliente
-        console.log('Mensaje recibido:', data);
-        // Puedes emitir mensajes a otros clientes o realizar otras acciones
-        io.emit('messageLogs', data);
-    });
-})
-module.exports = { io, httpServer };
+
+
+
 
 
 

@@ -1,20 +1,35 @@
 const { Router } = require('express')
-const ProductManagerFile = require('../managers/productManagerFile');
-
-const productManager = new ProductManagerFile();
+const { usersModel } = require('../models/users.model')
+const { authentication } = require('../middlewars/auth.middleware')
 
 const router = Router()
 
-const productMock = [
-    {id:'1', title: 'Product 1', price: 1500, stock: 100, description: 'Esto es un prod. '},
-    {id:'2', title: 'Product 2', price: 1500, stock: 100, description: 'Esto es un prod. '},
-    {id:'3', title: 'Product 3', price: 1500, stock: 100, description: 'Esto es un prod. '},
-]
+
+router.get('/users', authentication, async (req, res) => {
+    const { numPage=1, limit=10 } = req.query
+    const {
+        docs,
+        hasPrevPage,
+        hasNextPage,
+        prevPage,
+        nextPage,
+        page
+    } = await usersModel.paginate({}, {limit, page: numPage, sort: {first_name: 1}, lean: true})
+    // console.log(result)
+    res.render('users', {
+        users: docs,
+        hasNextPage,
+        hasPrevPage,
+        prevPage,
+        nextPage,
+        page
+    })
+})
 
 router.get('/', (req,res)=> {
-    res.render('index.hbs', {
-        title: 'E-Commerce Manu', 
-        name: 'E-Commerce Manu',
+    res.render('index', {
+        title: 'Mercadito Fede', 
+        name: 'Fede el mejor',
         style: 'index.css'
     })
 })
@@ -22,8 +37,8 @@ router.get('/', (req,res)=> {
 router.get('/prod', (req, res) => {
     
     const userMock = {
-        title: 'E-Commerce Manu', 
-        name: 'E-Commerce Manu',
+        title: 'Mercadito Fede', 
+        name: 'Fede el mejor',
         role:  'admin'
     }
 
@@ -35,10 +50,6 @@ router.get('/prod', (req, res) => {
         style: 'products.css'
     })
 })
-router.get('/realtimeproducts', async (req, res) => {
-    const products = await productManager.getProducts();
-    res.render('realTimeProducts', { products });
-});
 
 module.exports = router
 
