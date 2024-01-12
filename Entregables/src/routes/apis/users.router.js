@@ -21,12 +21,13 @@ router.get('/', async (req, res) =>{
 // POST localhost:8080  /api/users /
 router.post('/', async (req, res) =>{
     try {
-        const {first_name, last_name, email} = req.body
+        const {first_name, last_name, email,password} = req.body
         // validación
         const result = await usersModel.create({
             first_name,
             last_name,
-            email
+            email,
+            password
         })
         console.log(first_name, last_name, email)
         res.status(201).send({ 
