@@ -8,6 +8,7 @@ const ordersRouter = require('./routes/apis/orders.router.js')
 const sessionsRouter = require('./routes/apis/sessions.router.js')
 const { Server } = require('socket.io')
 const { connectDB } = require('./config/index.js')
+const authRoutes = require('../src/routes/apis/auth.router.js'); // Cambié el nombre del archivo
 
 
 
@@ -31,6 +32,7 @@ app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/api/orders', ordersRouter)
 app.use('/api/sessions', sessionsRouter)// login - register - logout (userMAnager)
+app.use('/api/auth', authRoutes); // ruta de autenticación
  
 app.use(( err, req, res, next)=>{
     console.error(err)

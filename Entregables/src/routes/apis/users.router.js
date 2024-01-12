@@ -19,25 +19,33 @@ router.get('/', async (req, res) =>{
 
 
 // POST localhost:8080  /api/users /
-router.post('/', async (req, res) =>{
+router.post('/', async (req, res) => {
     try {
-        const {first_name, last_name, email,password} = req.body
-        // validación
+        const { first_name, last_name, email, password } = req.body;
+
+        // Validación y cifrado de la contraseña
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Crear el nuevo usuario
         const result = await usersModel.create({
             first_name,
             last_name,
             email,
-            password
-        })
-        console.log(first_name, last_name, email)
-        res.status(201).send({ 
+            password: hashedPassword,
+        });
+
+        res.status(201).send({
             status: 'success',
-            payload: result        
-        })
+            payload: result,
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        res.status(500).send({
+            status: 'error',
+            message: 'Error en el servidor',
+        });
     }
-    
 })
 // PUT localhost:8080  /api/users /:uid
 router.put('/:uid',  async (req, res) =>{
