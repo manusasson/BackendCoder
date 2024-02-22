@@ -1,60 +1,35 @@
-const express = require('express')
-const handlebars = require('express-handlebars')
-const userRouter = require('./routes/apis/users.router.js')
-const productsRouter = require('./routes/apis/products.router.js')
-const viewsRouter = require('./routes/views.router.js')
-const cartsRouter = require('./routes/apis/carts.router.js')
-const ordersRouter = require('./routes/apis/orders.router.js')
-const sessionsRouter = require('./routes/apis/sessions.router.js')
-const { Server } = require('socket.io')
-const { connectDB } = require('./config/index.js')
-const authRoutes = require('../src/routes/apis/auth.router.js'); // Cambié el nombre del archivo
+const express       = require('express')
+const appRouter     = require('./routes')
+const { connectDb } = require('./config')
+const handlebars    = require('express-handlebars')
+const cors          = require('cors')
 
-
+const cookie        = require('cookie-parser')
+const { initializePassport } = require('./passport-jwt/passport.config')
+const passport = require('passport')
 
 const app = express()
 const PORT = 8080
 
+connectDb()
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use(express.static(__dirname+'/public'))
-
-app.engine('hbs', handlebars.engine({
-    extname: '.hbs'
-}))
-app.set('view engine', 'hbs')
+app.use(express.urlencoded({extended: true}))
+app.use(cors())
+// app.use(express.static(__dirname+'/public'))
+app.use(cookie())
+// config handlebars
+app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
-connectDB()
+app.set('view engine', 'handlebars')
 
-app.use('/', viewsRouter)
-app.use('/api/users', userRouter)// crud de user (userManager uso completo)
-app.use('/api/products', productsRouter)
-app.use('/api/carts', cartsRouter)
-app.use('/api/orders', ordersRouter)
-app.use('/api/sessions', sessionsRouter)// login - register - logout (userMAnager)
-app.use('/api/auth', authRoutes); // ruta de autenticación
- 
-app.use(( err, req, res, next)=>{
-    console.error(err)
-    res.status(500).send(`Error Server`)
+initializePassport()
+app.use(passport.initialize())
+
+app.use(appRouter)
+
+app.listen(PORT, err =>{
+    if (err) {
+        console.log(err)
+    }
+    console.log(`Server escuchando en puerto: ${PORT}`) 
 })
-
-const httpServer = app.listen(PORT, err =>{
-    if (err)  console.log(err)
-    console.log(`Escuchando en el puerto ${PORT}`)
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
