@@ -8,6 +8,9 @@ class UserDaoMongo {
     async getUsers(){
         return await this.model.find({})           
     }
+    async getUserByEmail(email) {
+        return await this.model.findOne({ email });
+    }
 
     async getUser(filter){
         return await this.model.findOne(filter)

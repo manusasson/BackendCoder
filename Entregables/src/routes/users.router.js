@@ -28,10 +28,19 @@ router
     .post('/', async (req, res) => {
         try {
             const { first_name, last_name, email, password, role } = req.body;
-
+    
+            // Verificar si ya existe un usuario con el mismo correo electrónico
+            const existingUser = await userService.getUserByEmail(email);
+            if (existingUser) {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Ya existe un usuario con este correo electrónico'
+                });
+            }
+    
             // Encriptar la contraseña
-            const hashedPassword = await bcrypt.hash(password, 10); // El segundo parámetro es el costo del hash
-
+            const hashedPassword = await bcrypt.hash(password, 10);
+    
             // Crear el nuevo usuario con la contraseña encriptada
             const newUser = {
                 first_name,
@@ -40,17 +49,16 @@ router
                 password: hashedPassword,
                 role
             };
-
-            // Realizar cualquier validación necesaria antes de crear el usuario
-
+        
             const result = await userService.createUser(newUser);
-            res.status(201).send({
+            res.status(201).json({
                 status: 'success',
+                message: 'Usuario creado exitosamente',
                 payload: result
             });
         } catch (error) {
-            console.log(error);
-            res.status(500).send({
+            console.error(error);
+            res.status(500).json({
                 status: 'error',
                 message: 'Error en el servidor'
             });
