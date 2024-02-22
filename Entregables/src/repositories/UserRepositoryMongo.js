@@ -1,4 +1,3 @@
-const UserDaoMongo = require('../Daos/mongo/usersDaoMongo');
 const UserRepository = require('./UserRepository');
 
 class UserRepositoryMongo extends UserRepository {
