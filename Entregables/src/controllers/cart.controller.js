@@ -1,4 +1,4 @@
-const Cart = require('../models/cart.model');
+const Cart = require('../daos/Mongo/models/cart.model');
 const Product = require('../models/product.model');
 const TicketService = require('../services/ticket.service');
 const ticketService = new TicketService();
