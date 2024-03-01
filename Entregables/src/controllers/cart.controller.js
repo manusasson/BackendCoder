@@ -1,50 +1,46 @@
 const Cart = require('../daos/Mongo/models/cart.model');
 const Product = require('../models/product.model');
-const TicketService = require('../services/ticket.service');
-const ticketService = new TicketService();
 
 class CartController {
-    async purchaseCart(req, res) {
+    async addToCart(req, res) {
         try {
-            // Obtener el ID del carrito desde los parámetros de la ruta
-            const { cid } = req.params;
+            const { productId, quantity } = req.body;
+            const userId = req.user._id; // Obtener el ID del usuario desde la solicitud
 
-            // Obtener el carrito de la base de datos
-            const cart = await Cart.findById(cid).populate('items.product');
+            // Verificar si el usuario ya tiene un carrito
+            let cart = await Cart.findOne({ user: userId });
 
-            // Verificar si el carrito existe
             if (!cart) {
-                return res.status(404).json({ status: 'error', message: 'Carrito no encontrado' });
+                // Si el usuario no tiene un carrito, crear uno nuevo
+                cart = new Cart({ user: userId, items: [] });
             }
 
-            // Verificar si el carrito está vacío
-            if (cart.items.length === 0) {
-                return res.status(400).json({ status: 'error', message: 'El carrito está vacío' });
-            }
+            // Verificar si el producto ya está en el carrito
+            const existingItemIndex = cart.items.findIndex(item => item.product.equals(productId));
 
-            // Crear un array para almacenar los IDs de los productos no comprados
-            const productsNotPurchased = [];
-
-            // Verificar el stock de cada producto en el carrito
-            for (const item of cart.items) {
-                const product = item.product;
-                if (product.stock < item.quantity) {
-                    productsNotPurchased.push(product._id);
-                }
-            }
-
-            // Si hay suficiente stock para todos los productos en el carrito, proceder con la compra
-            if (productsNotPurchased.length === 0) {
-                const newTicket = await ticketService.createTicket(ticketCode, totalAmount, req.user.email);
-                // Actualizar el carrito para contener solo los productos que no se pudieron comprar
-                if (productsNotPurchased.length > 0) {
-                    await Cart.findByIdAndUpdate(cid, { $pull: { items: { product: { $in: productsNotPurchased } } } });
-                }
-                return res.status(200).json({ status: 'success', message: 'Compra realizada con éxito' });
+            if (existingItemIndex !== -1) {
+                // Si el producto ya está en el carrito, actualizar la cantidad
+                cart.items[existingItemIndex].quantity += quantity;
             } else {
-                // Enviar una respuesta indicando los productos que no pudieron ser agregados al carrito
-                return res.status(400).json({ status: 'error', message: 'Algunos productos no estaban disponibles', productsNotPurchased });
+                // Si el producto no está en el carrito, agregarlo
+                const product = await Product.findById(productId);
+                if (!product) {
+                    return res.status(404).json({ status: 'error', message: 'Producto no encontrado' });
+                }
+
+                // Verificar si hay suficiente stock
+                if (product.stock < quantity) {
+                    return res.status(400).json({ status: 'error', message: 'No hay suficiente stock' });
+                }
+
+                // Agregar el nuevo producto al carrito
+                cart.items.push({ product: productId, quantity });
             }
+
+            // Guardar el carrito actualizado en la base de datos
+            await cart.save();
+
+            res.status(200).json({ status: 'success', message: 'Producto agregado al carrito' });
         } catch (error) {
             console.error(error);
             res.status(500).json({ status: 'error', message: 'Error interno del servidor' });

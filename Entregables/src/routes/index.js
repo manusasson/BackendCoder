@@ -9,7 +9,7 @@ const router = Router()
 
 
 
-// router.use('/', viewsRouter)
+router.use('/', viewsRouter)
 router.use('/api/sessions', sessionsRouter)
 router.use('/api/users', userRouter)
 router.use('/api/products', prodcutsRouter)

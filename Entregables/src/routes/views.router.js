@@ -1,11 +1,20 @@
-const {Router} = require('express')
+const { Router } = require('express');
+const router = Router();
 
-const router = Router()
-
-router.use('/', (req, res) => {
+router.get('/', (req, res) => {
     res.render('index', {
-        username: 'Federico'
-    })
-})
+        username: 'Manu'
+    });
+});
 
-module.exports = router
+// Ruta para renderizar el formulario de registro
+router.get('/register', (req, res) => {
+    res.render('register');
+});
+
+// Ruta para renderizar el formulario de login
+router.get('/login', (req, res) => {
+    res.render('login');
+});
+
+module.exports = router;
