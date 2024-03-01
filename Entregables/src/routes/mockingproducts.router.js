@@ -5,8 +5,8 @@ const generateProducts = require('../utils/mockingProducts');
 
 mockingProductsRouter.get('/', async (req, res) => {
     const products = await generateProducts(); 
-    
-    res.json(products);
+    res.send("Mock creado!")
+    //res.json(products);
 });
 
 module.exports = mockingProductsRouter;
