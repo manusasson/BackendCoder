@@ -7,6 +7,6 @@ const CartController = require('../controllers/cart.controller');
 const cartController = new CartController();
 
 // Middleware de autorización para la ruta de compra del carrito
-router.post('/:cid/purchase', authorization(['user']), cartController.purchaseCart);
+router.post('/:cid/purchase', authorization(['user']), cartController.addToCart);
 
 module.exports = router;
