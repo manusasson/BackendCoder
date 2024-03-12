@@ -5,8 +5,8 @@ const LoggerController = require('../controllers/logger.controller');
 
 // Controlador para la prueba de logs
 const loggerController = new LoggerController();
-console.log(loggerController)
 
+console.log('llegando')
 // Ruta para probar los registros
 router.get('/api/loggerTest', loggerController.logTest);
 

@@ -1,5 +1,5 @@
 const winston = require('winston');
-
+require('dotenv').config();
 // Definir niveles
 const levels = {
   debug: 0,

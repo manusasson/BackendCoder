@@ -1,5 +1,5 @@
 const Cart = require('../daos/Mongo/models/cart.model');
-const Product = require('../models/product.model');
+const Product = require('../daos/Mongo/models/products.model');
 
 class CartController {
     async addToCart(req, res) {

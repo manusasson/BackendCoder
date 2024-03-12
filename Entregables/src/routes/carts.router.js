@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authorization } = require('../authorizationMiddleware');
+const { authorization } = require('../passport-jwt/authorization.middleware');
 const CartController = require('../controllers/cart.controller');
 
 // Controlador para el carrito
