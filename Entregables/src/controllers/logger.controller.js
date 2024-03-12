@@ -1,5 +1,5 @@
 
-const logger = require('../utils/logger');
+const logger = require('../utils/loggers');
 
 class LoggerController {
   logTest(req, res) {

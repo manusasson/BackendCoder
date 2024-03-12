@@ -13,7 +13,7 @@ const router = Router()
 
 
 router.use('/', viewsRouter)
-router.use('/api/loggerTest',loggerTest)
+router.use('/loggerTest',loggerTest)
 router.use('/api/sessions', sessionsRouter)
 router.use('/api/users', userRouter)
 router.use('/api/products', prodcutsRouter)
@@ -22,7 +22,6 @@ router.post('/uploader', uploader.single('myFile'), (req, res)=>{
 
     res.send('Imagen subida!')
 })
-router.use('/api/mockingproducts', mockingProductsRouter); // Agregar el nuevo enrutador
-
+router.use('/api/mockingproducts', mockingProductsRouter); 
 module.exports = router
 // dao -> data access object

@@ -8,6 +8,8 @@ const loggerController = new LoggerController();
 
 console.log('llegando')
 // Ruta para probar los registros
-router.get('/api/loggerTest', loggerController.logTest);
+
+
+router.get('/loggerTest', loggerController.logTest);
 
 module.exports = router;
