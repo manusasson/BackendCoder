@@ -1,4 +1,12 @@
 const { connect } = require('mongoose')
+const { commander } = require('../utils/commander')
+const dotenv = require('dotenv')
+
+const {mode} = commander.opts()
+dotenv.config({
+    path:'./.env'
+})
+
 
 exports.connectDb = async () => {
     try {

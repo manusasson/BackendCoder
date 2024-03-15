@@ -9,9 +9,13 @@ const cors          = require('cors')
 const cookie        = require('cookie-parser')
 const { initializePassport } = require('./passport-jwt/passport.config')
 const passport = require('passport')
+const { commander } = require('./utils/commander')
 
 const app = express()
 const PORT = 8080
+
+
+
 
 connectDb()
 app.use(express.json())

@@ -8,5 +8,6 @@ const cartController = new CartController();
 
 // Middleware de autorización para la ruta de compra del carrito
 router.post('/:cid/purchase', authorization(['user']), cartController.addToCart);
-
+router.put('/cart/items/:itemId', authorization(['user']), cartController.updateCartItem);
+router.delete('/cart/items/:itemId', authorization(['user']), cartController.deleteCartItem);
 module.exports = router;

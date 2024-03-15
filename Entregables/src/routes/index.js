@@ -11,7 +11,7 @@ const mockingProductsRouter = require('./mockingproducts.router.js');
 const router = Router()
 
 
-
+router.use('/sendEmail',() => {})
 router.use('/', viewsRouter)
 router.use('/api/loggerTest',loggerTest)
 router.use('/api/sessions', sessionsRouter)
