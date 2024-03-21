@@ -47,7 +47,13 @@ router.post('/reset-password', async (req, res) => {
     if (!userId) {
         return res.status(400).json({ status: 'error', message: 'Token de restablecimiento inválido' });
     }
-    console.log(`usuario: ${userId}`)
+
+    const tokenExpired = isResetTokenExpired(token);
+    if (tokenExpired) {
+        // Redirigir al usuario a la página de restablecimiento de contraseña
+        return res.redirect('/recovery/reset-password');
+    }
+
     // Actualizar la contraseña del usuario
 
     try {
