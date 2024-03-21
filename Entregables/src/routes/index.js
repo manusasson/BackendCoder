@@ -12,8 +12,7 @@ const recoveryRouter = require('./recovery.router.js'); // Importar el nuevo rou
 
 const router = Router()
 
-router.use('/sendEmail', recoveryRouter); // Usar el nuevo router para recuperación de contraseña
-router.use('/sendEmail',() => {})
+router.use('/recovery', recoveryRouter); 
 router.use('/', viewsRouter)
 router.use('/api/loggerTest',loggerTest)
 router.use('/api/sessions', sessionsRouter)

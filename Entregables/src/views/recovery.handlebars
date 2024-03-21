@@ -1,0 +1,46 @@
+<!-- recovery.handlebars -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperación de Contraseña</title>
+</head>
+<body>
+    <h2>Recuperación de Contraseña</h2>
+    <p>Ingrese su correo electrónico para recibir instrucciones sobre cómo restablecer su contraseña.</p>
+    <form id="recoveryForm">
+        <label for="email">Correo Electrónico:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        <button type="button" id="submitRecovery">Enviar</button>
+    </form>
+    <p id="recoveryMessage"></p>
+
+    <script>
+        document.getElementById('submitRecovery').addEventListener('click', async () => {
+            const formData = new FormData(document.getElementById('recoveryForm'));
+            const email = formData.get('email');
+
+            try {
+                const response = await fetch('/recovery/forgot-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('recoveryMessage').innerText = data.message;
+                } else {
+                    document.getElementById('recoveryMessage').innerText = data.error;
+                }
+            } catch (error) {
+                console.error('Error al enviar la solicitud:', error);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 // recovery.router.js
 const { Router } = require('express');
-const { generateResetToken } = require('../utils/passwordReset');
-const { sendResetEmail } = require('../utils/sendEmail');
+const { generatePasswordResetToken } = require('../utils/passwordReset');
+const { sendEmail } = require('../utils/sendEmail');
 const UserDaoMongo = require('../daos/Mongo/usersDaoMongo');
 
 const router = Router();
@@ -17,11 +17,11 @@ router.post('/forgot-password', async (req, res) => {
     }
 
     // Generar token de restablecimiento de contraseña
-    const resetToken = generateResetToken(user._id);
+    const resetToken = generatePasswordResetToken(user._id);
 
     // Enviar correo electrónico con el token de restablecimiento
     try {
-        await sendResetEmail(email, resetToken);
+        await sendEmail(email, "Password Recovery",resetToken);
         res.status(200).json({ status: 'success', message: 'Correo electrónico de restablecimiento enviado' });
     } catch (error) {
         console.error('Error al enviar correo electrónico de restablecimiento:', error);

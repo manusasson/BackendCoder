@@ -17,4 +17,7 @@ router.get('/login', (req, res) => {
     res.render('login');
 });
 
+router.get('/recovery', (req, res) => {
+    res.render('recovery');
+});
 module.exports = router;
