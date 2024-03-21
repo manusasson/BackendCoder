@@ -14,7 +14,7 @@ const {
 // Aplicar middleware de autorización en las rutas correspondientes
 router.get('/', getProducts);
 router.get('/:pid', getProduct);
-router.post('/', authorization(['admin']), createProduct); // Requiere rol de administrador para crear un producto
+router.post('/', authorization(['admin','premium']), createProduct); // Requiere rol de administrador para crear un producto
 router.put('/:pid', authorization(['admin']), updateProduct); // Requiere rol de administrador para actualizar un producto
 router.delete('/:pid', authorization(['admin']), deleteProduct); // Requiere rol de administrador para eliminar un producto
 

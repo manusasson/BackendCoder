@@ -7,10 +7,12 @@ const cartsRouter = require('./carts.router.js')
 const loggerTest = require('./logger.router.js')
 const { uploader } = require('../utils/upoloader.js')
 const mockingProductsRouter = require('./mockingproducts.router.js'); 
+const recoveryRouter = require('./recovery.router.js'); // Importar el nuevo router
+
 
 const router = Router()
 
-
+router.use('/sendEmail', recoveryRouter); // Usar el nuevo router para recuperación de contraseña
 router.use('/sendEmail',() => {})
 router.use('/', viewsRouter)
 router.use('/api/loggerTest',loggerTest)
