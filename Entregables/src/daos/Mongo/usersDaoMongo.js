@@ -38,7 +38,13 @@ class UserDaoMongo {
         }
     }
 
-    async deleteUser(uid){}
+    async deleteUser(uid){ 
+        try {
+        const result = await this.model.deleteOne({ _id: uid });
+        return result;
+    } catch (error) {
+        throw new Error('Error al eliminar el usuario');
+    }}
 }
 
 module.exports = UserDaoMongo
