@@ -14,33 +14,19 @@ function generatePasswordResetToken(user) {
 
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }); // Token expira en 1 hora
 }
-
-// Función para enviar el correo electrónico de restablecimiento de contraseña
-async function sendPasswordResetEmail(email, token) {
-  const transporter = nodemailer.createTransport({
-    service:'gmail',
-    port: 587,
-    auth:{  user:'manusasson@gmail.com',
-            pass:'ucgqfypbpoawqjrw' }
-  });
-
-  const mailOptions = {
-    from: 'tu_correo@ejemplo.com',
-    to: email,
-    subject: 'Restablecimiento de Contraseña',
-    html: `<p>Para restablecer tu contraseña, haz clic en el siguiente enlace:</p>
-           <a href="http://localhost:8080/reset-password?token=${token}">Restablecer Contraseña</a>`,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log('Correo de restablecimiento de contraseña enviado correctamente');
-  } catch (error) {
-    console.error('Error al enviar el correo de restablecimiento de contraseña:', error);
+// Función para verificar el token de restablecimiento de contraseña
+function verifyResetToken(token) {
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      return decoded.userId; // Retorna el ID del usuario extraído del token
+    } catch (error) {
+      console.error('Error al verificar el token de restablecimiento:', error);
+      return null;
+    }
   }
-}
+  
 
 module.exports = {
   generatePasswordResetToken,
-  sendPasswordResetEmail,
+  verifyResetToken,
 };
