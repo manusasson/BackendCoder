@@ -18,8 +18,8 @@ const swaggerOption = {
     definition:{
         openapi:'3.0.1',
         info:{
-            title:"Documentacion de la aplicacion",
-            description:'Descripcion de las API'
+            title:"Documentacion de la aplicaciòn Ecommerce - Manu",
+            description:'Descripcion de las APIs'
         }
     },
     apis:[`${__dirname}/docs/**/*.yaml`]
