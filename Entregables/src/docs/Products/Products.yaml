@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: API de Productos y Carrito de Compras
+  version: 1.0.0
+  description: Documentación de la API de Productos y Carrito de Compras
+tags:
+  - name: Productos
+    description: Endpoints relacionados con productos
+
+paths:
+  /api/products:
+    get:
+      summary: Obtener todos los productos
+      tags: [Productos]
+      responses:
+        '200':
+          description: Lista de productos obtenida correctamente
+        '500':
+          description: Error interno del servidor
+
+    post:
+      summary: Crear un nuevo producto
+      tags: [Productos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: number
+                category:
+                  type: string
+              required:
+                - title
+                - price
+                - stock
+                - category
+      responses:
+        '201':
+          description: Producto creado correctamente
+        '400':
+          description: Error en la solicitud
+        '500':
+          description: Error interno del servidor
+
+  /api/products/{productId}:
+    delete:
+      summary: Eliminar un producto existente
+      tags: [Productos]
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID del producto a eliminar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto eliminado correctamente
+        '404':
+          description: Producto no encontrado
+        '500':
+          description: Error interno del servidor
+
+    put:
+      summary: Actualizar la información de un producto existente
+      tags: [Productos]
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID del producto a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: number
+                category:
+                  type: string
+              required:
+                - title
+                - price
+                - stock
+                - category
+      responses:
+        '200':
+          description: Producto actualizado correctamente
+        '400':
+          description: Error en la solicitud
+        '404':
+          description: Producto no encontrado
+        '500':
+          description: Error interno del servidor
+
+ 
