@@ -8,7 +8,7 @@ tags:
     description: Endpoints relacionados con el carrito
 paths:
  
- /api/cart:
+ /api/carts:
     get:
       summary: Obtener los productos en el carrito de compras
       tags: [Carrito]
