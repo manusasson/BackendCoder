@@ -1,9 +1,10 @@
 // recovery.router.js
 const { Router } = require('express');
-const { generatePasswordResetToken } = require('../utils/passwordReset');
+const { generatePasswordResetToken } = require('../users/passwordReset');
 const { sendEmail } = require('../utils/sendEmail');
 const UserDaoMongo = require('../daos/Mongo/usersDaoMongo');
-const { verifyResetToken } = require('../utils/passwordReset');
+const { verifyResetToken } = require('../users/passwordReset');
+const {isResetTokenExpired} = require ('../users/validateToken')
 const bcrypt = require('bcrypt');
 
 const router = Router();
@@ -20,7 +21,7 @@ router.post('/forgot-password', async (req, res) => {
     }
 
     // Generar token de restablecimiento de contraseña
-    const resetToken = generatePasswordResetToken(user._id);
+    const resetToken = generatePasswordResetToken(user);
 
     // Enviar correo electrónico con el token de restablecimiento
     try {
