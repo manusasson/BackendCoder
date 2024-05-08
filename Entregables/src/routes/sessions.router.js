@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const UserDaoMongo = require('../daos/Mongo/usersDaoMongo');
 const Cart = require('../daos/Mongo/models/cart.model');
-const { isValidPassword, createHash } = require('../utils/validatePassword');
+const { isValidPassword, createHash } = require('../users/validatePassword');
 const { generateToken } = require('../utils/createToken');
 const { passportCall } = require('../passport-jwt/passportCall.middleware');
 const { authorization } = require('../passport-jwt/authorization.middleware');
