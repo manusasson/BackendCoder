@@ -69,6 +69,28 @@ router
     })
     .delete('/:uid', async (req, res) => {
         res.send('users');
-    });
+    })
+    .put('/premium/:uid', async (req, res) => {
+        console.log("llegando al premium")
+        try {
+            const { uid } = req.params;
+            const user = await userService.getUserById(uid);
+
+            if (!user) {
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+            // Cambiar el rol del usuario
+            user.role = user.role === 'user' ? 'premium' : 'user';
+
+            // Guardar los cambios en la base de datos
+            await userService.updateUser(uid, { role: user.role });
+
+            res.status(200).json({ message: 'Rol de usuario actualizado correctamente' });
+        } catch (error) {
+            console.error('Error al cambiar el rol de usuario:', error);
+            res.status(500).json({ message: 'Error en el servidor' });
+        }
+    });;
 
 module.exports = router;

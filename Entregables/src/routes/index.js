@@ -7,11 +7,12 @@ const cartsRouter = require('./carts.router.js')
 const loggerRouter = require('./logger.router.js')
 const { uploader } = require('../utils/upoloader.js')
 const mockingProductsRouter = require('./mockingproducts.router.js'); 
+const recoveryRouter = require('./recovery.router.js'); // Importar el nuevo router
+
 
 const router = Router()
 
-
-
+router.use('/recovery', recoveryRouter); 
 router.use('/', viewsRouter)
 router.use('/loggerTest',loggerRouter)
 router.use('/api/sessions', sessionsRouter)

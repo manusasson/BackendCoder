@@ -46,6 +46,59 @@ class CartController {
             res.status(500).json({ status: 'error', message: 'Error interno del servidor' });
         }
     }
+
+    async getCart(req, res) {
+        try {
+            const userId = req.user._id;
+            const cart = await Cart.findOne({ user: userId }).populate('items.product', 'name price'); // Asegúrate de poblar los datos del producto en el carrito
+            res.status(200).json({ status: 'success', data: cart });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: 'error', message: 'Error interno del servidor' });
+        }
+    }
+
+    async updateCartItem(req, res) {
+        try {
+            const { itemId, quantity } = req.body;
+            const userId = req.user._id;
+
+            let cart = await Cart.findOne({ user: userId });
+
+            // Encuentra el ítem en el carrito y actualiza la cantidad
+            const item = cart.items.find(item => item._id.equals(itemId));
+            if (item) {
+                item.quantity = quantity;
+            } else {
+                return res.status(404).json({ status: 'error', message: 'El producto no está en el carrito' });
+            }
+
+            await cart.save();
+            res.status(200).json({ status: 'success', message: 'Carrito actualizado' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: 'error', message: 'Error interno del servidor' });
+        }
+    }
+
+    async deleteCartItem(req, res) {
+        try {
+            const { itemId } = req.params;
+            const userId = req.user._id;
+
+            let cart = await Cart.findOne({ user: userId });
+
+            // Encuentra y elimina el ítem del carrito
+            cart.items = cart.items.filter(item => !item._id.equals(itemId));
+
+            await cart.save();
+            res.status(200).json({ status: 'success', message: 'Producto eliminado del carrito' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: 'error', message: 'Error interno del servidor' });
+        }
+    }
+
 }
 
 module.exports = CartController;
